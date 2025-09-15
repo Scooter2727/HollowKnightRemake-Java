@@ -176,53 +176,60 @@ public class HollowKnight extends JPanel implements KeyListener, Runnable
         try
         {
             // LVL 1 Enemy Images
-            enemy[0] = ImageIO.read(new File("bugLeft.png"));
-            enemy[1] = ImageIO.read(new File("bugRight.png"));
-            enemy[2] = ImageIO.read(new File("bugLeft2.png"));
-            enemy[3] = ImageIO.read(new File("bugRight2.png"));
+            enemy[0] = ImageIO.read(new File("assets/bugLeft.png"));
+            enemy[1] = ImageIO.read(new File("assets/bugRight.png"));
+            enemy[2] = ImageIO.read(new File("assets/bugLeft2.png"));
+            enemy[3] = ImageIO.read(new File("assets/bugRight2.png"));
 
             // LVL 2 Boss Images
-            boss1Img[0] = ImageIO.read(new File("gruzLeft.png"));
-            boss1Img[1] = ImageIO.read(new File("gruzRight.png"));
-            boss1Img[2] = ImageIO.read(new File("gruzLeft2.png"));
-            boss1Img[3] = ImageIO.read(new File("gruzRight2.png"));
+            boss1Img[0] = ImageIO.read(new File("assets/gruzLeft.png"));
+            boss1Img[1] = ImageIO.read(new File("assets/gruzRight.png"));
+            boss1Img[2] = ImageIO.read(new File("assets/gruzLeft2.png"));
+            boss1Img[3] = ImageIO.read(new File("assets/gruzRight2.png"));
 
             // LVL 3 Boss Images
-            boss2Img[0] = ImageIO.read(new File("radianceIdle.png"));
-            boss2Img[1] = ImageIO.read(new File("radianceAttack.png"));
-            boss2Beam = ImageIO.read(new File("beamAttackAnimation.png"));
+            boss2Img[0] = ImageIO.read(new File("assets/radianceIdle.png"));
+            boss2Img[1] = ImageIO.read(new File("assets/radianceAttack.png"));
+            boss2Beam = ImageIO.read(new File("assets/beamAttackAnimation.png"));
 
             // Background Images
-            background1 = ImageIO.read(new File("enemyBackground.png"));
-            background2 = ImageIO.read(new File("background.png"));
-            background3 = ImageIO.read(new File("boss2Background.png"));
-            titleScreen = ImageIO.read(new File("titleScreen.png"));
-            gameOverScreen = ImageIO.read(new File("gameOver.png"));
-            winScreen = ImageIO.read(new File("winScreen.png"));
-            controlsScreen = ImageIO.read(new File("controlsScreen.png"));
-            highScoreScreen = ImageIO.read(new File("highScores.png"));
-            inputNameScreen = ImageIO.read(new File("inputNameScreen.png"));
+            // Fix incorrect path: use the existing background image for level 1
+            background1 = ImageIO.read(new File("assets/background.png"));
+            background2 = ImageIO.read(new File("assets/background.png"));
+            background3 = ImageIO.read(new File("assets/boss2Background.png"));
+            titleScreen = ImageIO.read(new File("assets/titleScreen.png"));
+            gameOverScreen = ImageIO.read(new File("assets/gameOver.png"));
+            winScreen = ImageIO.read(new File("assets/winScreen.png"));
+            controlsScreen = ImageIO.read(new File("assets/controlsScreen.png"));
+            highScoreScreen = ImageIO.read(new File("assets/highScores.png"));
+            inputNameScreen = ImageIO.read(new File("assets/inputNameScreen.png"));
 
             // All player animations
-            playerImg[0] = ImageIO.read(new File("walk1R.png")); // Add 2 later
-            playerImg[1] = ImageIO.read(new File("walk1L.png")); // Add 2 later
-            playerImg[2] = ImageIO.read(new File("attackRight.png"));
-            playerImg[3] = ImageIO.read(new File("attackLeft.png"));
-            playerImg[4] = ImageIO.read(new File("jumpingRight.png"));
-            playerImg[5] = ImageIO.read(new File("jumpingLeft.png"));
+            playerImg[0] = ImageIO.read(new File("assets/walk1R.png")); // Add 2 later
+            playerImg[1] = ImageIO.read(new File("assets/walk1L.png")); // Add 2 later
+            playerImg[2] = ImageIO.read(new File("assets/attackRight.png"));
+            playerImg[3] = ImageIO.read(new File("assets/attackLeft.png"));
+            playerImg[4] = ImageIO.read(new File("assets/jumpingRight.png"));
+            playerImg[5] = ImageIO.read(new File("assets/jumpingLeft.png"));
 
             // Health Images
-            health1 = ImageIO.read(new File("life1.png"));
-            health2 = ImageIO.read(new File("life2.png"));
-            health3 = ImageIO.read(new File("life3.png"));
-            health4 = ImageIO.read(new File("life4.png"));
-            health5 = ImageIO.read(new File("life5.png"));
+            health1 = ImageIO.read(new File("assets/life1.png"));
+            health2 = ImageIO.read(new File("assets/life2.png"));
+            health3 = ImageIO.read(new File("assets/life3.png"));
+            health4 = ImageIO.read(new File("assets/life4.png"));
+            health5 = ImageIO.read(new File("assets/life5.png"));
 
             // Soul Images
-            fullSoul = ImageIO.read(new File("fullSoul.png"));
-            emptySoul = ImageIO.read(new File("emptySoul.png"));
+            fullSoul = ImageIO.read(new File("assets/fullSoul.png"));
+            emptySoul = ImageIO.read(new File("assets/emptySoul.png"));
         }
-        catch (Exception e) {} // Nothing???
+        catch (Exception e) {
+            // Surface asset loading issues instead of failing silently
+            e.printStackTrace();
+        }
+
+        // Fallbacks to avoid blank screen if some assets are missing
+        if (fullSoul == null) fullSoul = emptySoul;
     }
 
                         //      PAINTCOMPONENT      //
@@ -630,7 +637,8 @@ public class HollowKnight extends JPanel implements KeyListener, Runnable
 
         //      TEXT FILE STREAMING     //5
 
-        Scanner inputFile = new Scanner(new File("gameScores.txt"));
+        Scanner inputFile = new Scanner(new File("assets/gameScores.txt"));
+        
 
         String player1 = inputFile.nextLine();
         String player2 = inputFile.nextLine();
@@ -964,7 +972,7 @@ public class HollowKnight extends JPanel implements KeyListener, Runnable
 
     public static void outputTextFile() throws IOException // The method to run when the high scores need to be updated
     {
-        PrintWriter outputFile = new PrintWriter(new FileWriter("gameScores.txt"));
+        PrintWriter outputFile = new PrintWriter(new FileWriter("assets/gameScores.txt"));
 
         outputFile.printf("%s %d%n", name1, highScore1);
         outputFile.printf("%s %d%n", name2, highScore2);
